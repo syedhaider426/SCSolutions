@@ -6,6 +6,7 @@ var express = require('express'),
     http = require('http'),
     https = require('https'),
     port = process.env.PORT || 3000,
+    httpPort = process.env.PORT || 8080
     mongoose = require('mongoose'),
     Task = require('./api/models/todoListModel'), //created model loading here
     User = require('./api/models/userModel'),
@@ -18,25 +19,6 @@ var express = require('express'),
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost/Tododb', { useMongoClient: true }); //allows for client connection
 
-const YEAR = 31536000000; //year to milliseconds
-
-//set up secure https application using helmet (sets HTTP headers)
-secureApp.use(h.hsts({
-    maxAge: YEAR,
-    includeSubdomains: true,
-    force: true
-}));
-var cipher = ['ECDHE-ECDSA-AES256-GCM-SHA384',
-    'ECDHE-RSA-AES256-GCM-SHA384',
-    'ECDHE-RSA-AES256-CBC-SHA384',
-    'ECDHE-RSA-AES256-CBC-SHA256',
-    'ECDHE-ECDSA-AES128-GCM-SHA256',
-    'ECDHE-RSA-AES128-GCM-SHA256',
-    'DHE-RSA-AES128-GCM-SHA256',
-    'DHE-RSA-AES256-GCM-SHA384',
-    '!aNULL',
-    '!MD5',
-    '!DSS'].join(':');
 
 //parses URL-encoded data with qs library option (because extended: true)
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -46,7 +28,6 @@ app.use(bodyParser.json());
 secureApp.use(bodyParser.json());
 
 //var publicKey = reader.readFileSync('/home/syed/yourkeyname.pem','utf8'); //reads public key with encoding
-
 //creating (stateless) jwt for user session
 //secureApp.use(jwt({ secret: publicKey }).unless({ path: ['/sign_in', '/register', '/loginRequired'] }));
 
@@ -56,12 +37,12 @@ routes(app);
 
 //information necessary for 
 var ops = {
-    key: reader.readFileSync('/etc/letsencrypt/live/chatwithme.me/privkey.pem'),
-    cert: reader.readFileSync('/etc/letsencrypt/live/chatwithme.me/fullchain.pem'),
-    ciphers: cipher
+    key: reader.readFileSync('/home/ubuntu/PaperHat/todoListApi/privkey.pem'),
+    cert: reader.readFileSync('/home/ubuntu/PaperHat/todoListApi/fullchain.pem'),
+   // ciphers: cipher
 };
 //Instance server for http and https Node.js web application
-http.createServer(app).listen(port);
+http.createServer(app).listen(httpPort);
 https.createServer(ops, secureApp).listen(port);
 
-console.log('todo list RESTful API server started on: ' + port);
+console.log('todo list RESTful API server started on: ' + httpPort + ' and ' +  port);
