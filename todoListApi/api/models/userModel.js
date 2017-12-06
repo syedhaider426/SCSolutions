@@ -1,7 +1,7 @@
 'use strict';
 
 var mongoose = require('mongoose'),
-bcrypt = require('bcrypt'),
+bcryptjs = require('bcryptjs'),
 Schema = mongoose.Schema;
 
 /**
@@ -32,7 +32,7 @@ var UserSchema = new Schema({
 
 UserSchema.methods.comparePassword = function(password)
 {
-	return bcrypt.compareSync(password,this.hash_password);
+	return bcryptjs.compareSync(password,this.hash_password);
 };
 
 mongoose.model('User',UserSchema);

@@ -45,10 +45,10 @@ secureApp.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 secureApp.use(bodyParser.json());
 
-var publicKey = reader.readFileSync('/home/osboxes/Desktop/yourkeyname.pem','utf8'); //reads public key with encoding
+//var publicKey = reader.readFileSync('/home/syed/yourkeyname.pem','utf8'); //reads public key with encoding
 
 //creating (stateless) jwt for user session
-secureApp.use(jwt({ secret: publicKey }).unless({ path: ['/sign_in', '/register', '/loginRequired'] }));
+//secureApp.use(jwt({ secret: publicKey }).unless({ path: ['/sign_in', '/register', '/loginRequired'] }));
 
 var routes = require('./api/routes/todoListRoutes'); //importing route
 routes(secureApp); //register the route
@@ -62,6 +62,6 @@ var ops = {
 };
 //Instance server for http and https Node.js web application
 http.createServer(app).listen(port);
-https.createServer(options, secureApp).listen(port);
+https.createServer(ops, secureApp).listen(port);
 
 console.log('todo list RESTful API server started on: ' + port);
