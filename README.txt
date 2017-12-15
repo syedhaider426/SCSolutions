@@ -1,0 +1,2 @@
+The only functional programs in this repository are the encrypter/decrypter modules, though they are not linked
+to anything. Navigate to the SCS-Client repository and follow the readme instructions there to test the software.
